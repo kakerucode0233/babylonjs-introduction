@@ -8,13 +8,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 // TODO:pathが通らない問題の解決
-import { BasicScene } from '../BabylonExamples/BasicScene';
+import { StandardMaterials } from '../BabylonExamples/StandardMaterials';
 
 export default defineComponent({
   name: 'BabylonExamples',
   mounted(){
     const canvas = document.querySelector("canvas")!;
-    new BasicScene(canvas);
+    new StandardMaterials(canvas);
   }
 
 });
