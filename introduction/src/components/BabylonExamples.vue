@@ -1,19 +1,20 @@
 <template>
-
-
-<div>
-  <h3>Babylon Example</h3>
-  <canvas class="canvas"></canvas>
-</div>
+  <div>
+    <h3>Babylon Example</h3>
+    <canvas></canvas>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+// TODO:pathが通らない問題の解決
+import { BasicScene } from '../BabylonExamples/BasicScene';
 
 export default defineComponent({
   name: 'BabylonExamples',
   mounted(){
-    const canvas = document.querySelector("canvas")
+    const canvas = document.querySelector("canvas")!;
+    new BasicScene(canvas);
   }
 
 });
@@ -21,18 +22,8 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+canvas{
+  width: 70%;
+  height: 70%;
 }
 </style>
