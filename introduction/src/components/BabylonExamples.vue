@@ -8,13 +8,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 // TODO:pathが通らない問題の解決
-import { PBR } from '../BabylonExamples/PRB';
+import { CustomMultiplyModels } from '../BabylonExamples/CustomMultiplyModels';
 
 export default defineComponent({
   name: 'BabylonExamples',
   mounted(){
     const canvas = document.querySelector("canvas")!;
-    new PBR(canvas);
+    new CustomMultiplyModels(canvas);
   }
 
 });
