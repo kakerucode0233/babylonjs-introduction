@@ -43,8 +43,10 @@ export class LightShadow{
     const glowLayer = new GlowLayer("glowLayer", this.scene);
     glowLayer.intensity = 0.75;
     
+    // TODO:壁と床について、Blenderで作成したモデルのマテリアルが上手く出力されなかったので、暫定的にBabylon.js側で作成
     this.CreateWall();
     this.CreateFloor();
+
     this.CreateLight();
   }
 
@@ -124,8 +126,45 @@ export class LightShadow{
   }
 
   CreateLight(): void {
-    const hemiLight = new HemisphericLight("hemiLight", new Vector3(0, 1, 0), this.scene);
+    // const hemiLight = new HemisphericLight("hemiLight", new Vector3(0, 1, 0), this.scene);
 
+    // hemiLight.diffuse = new Color3(1, 0, 0);
+    // hemiLight.groundColor = new Color3(0, 0, 1);
+    // hemiLight.specular = new Color3(0, 1, 0);
+
+    // const directionalLight = new DirectionalLight("directionalLight", new Vector3(0, -1, 0), this.scene);
+
+    // const pointLight = new PointLight("pontLight", new Vector3(0, 1 ,0),this.scene);
+    // pointLight.diffuse = new Color3(172/255, 246/255, 250/255);
+    // pointLight.intensity = 0.25;
+
+    // const pointClone = pointLight.clone("pointClone") as PointLight;
+
+    // pointLight.parent = this.lightTubes[0];
+    // pointClone.parent = this.lightTubes[1];
+
+    const spotLight = new SpotLight("spotLight", new Vector3(0, 0.5, -3), new Vector3(0, 1, 3), Math.PI/2, 10, this.scene);
+    spotLight.intensity = 10;
+
+    // 影生成
+    spotLight.shadowEnabled = true;
+    spotLight.shadowMinZ = 1;
+    spotLight.shadowMaxZ = 10;
+
+    const shadowGen = new ShadowGenerator(1024, spotLight);
+    // 影生成時にジャギーが発生しないようにする
+    shadowGen.useBlurCloseExponentialShadowMap = true;
+
+    // メッシュに影を有効化
+    this.ball.receiveShadows = true;
+    shadowGen.addShadowCaster(this.ball);
+    this.models.map(mesh=>{
+      mesh.receiveShadows = true;
+      shadowGen.addShadowCaster(mesh);
+    })
+
+    // ライトを自由に動かせるようにギズモを付与
+    this.CreateGizmos(spotLight);
   }
 
   CreateGizmos(customLight: Light): void {
@@ -136,7 +175,7 @@ export class LightShadow{
     const gizmoManager = new GizmoManager(this.scene);
     gizmoManager.positionGizmoEnabled = true;
     gizmoManager.rotationGizmoEnabled = true;
-    gizmoManager.usePointerToAttachGizmos = true;
+    gizmoManager.usePointerToAttachGizmos = false;
     gizmoManager.attachToMesh(lightGizmo.attachedMesh);
   }
 
